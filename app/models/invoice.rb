@@ -33,4 +33,9 @@ class Invoice < ApplicationRecord
   def invoice_total_revenue
     invoice_items.sum('invoice_items.quantity * invoice_items.unit_price')
   end
+
+  def self.with_successful_transactions
+    joins(:transactions)
+    .where(transactions: { result: "success" })
+  end
 end

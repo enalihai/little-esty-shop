@@ -24,6 +24,7 @@ class Merchant < ApplicationRecord
     .where("transactions.result = 'success' AND invoices.status = 1")
     .group('items.id')
     .order('total_revenue desc')
+    .pluck(:name)
     .limit(5)
   end
 
@@ -33,5 +34,14 @@ class Merchant < ApplicationRecord
 
   def distinct_invoices
     invoices.distinct
+  end
+
+  def self.top_five_by_revenue
+    joins(:items).joins(:transactions)
+    .select('merchants.name, SUM(invoice_items.quantity * invoice_items.unit_price) AS total_revenue')
+    .where(transactions: { result: "success" })
+    .group('merchants.name')
+    .order('total_revenue desc')
+    .limit(5)
   end
 end
