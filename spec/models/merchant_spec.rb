@@ -104,4 +104,118 @@ RSpec.describe Merchant, type: :model do
       end
     end
   end
+  
+  describe 'calculate revenue methods' do
+    before :each do
+      @customer = Customer.create!(first_name: 'Jim', last_name: 'Jones')
+
+      @merchant_1 = Merchant.create!(name: 'Jones Meats')
+      @item_1 = @merchant_1.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_1 = @customer.invoices.create!(status: 'completed')
+      @invoice_1.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_1.invoice_items.create!(invoice_id: @invoice_1.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_2 = Merchant.create!(name: 'Sals Spice Rubs')
+      @item_2 = @merchant_2.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_2 = @customer.invoices.create!(status: 'completed')
+      @invoice_2.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_3 = @customer.invoices.create!(status: 'completed')
+      @invoice_3.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_2.invoice_items.create!(invoice_id: @invoice_2.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_2.invoice_items.create!(invoice_id: @invoice_3.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_3 = Merchant.create!(name: 'City Fresh Meats')
+      @item_3 = @merchant_3.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_4 = @customer.invoices.create!(status: 'completed')
+      @invoice_4.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_5 = @customer.invoices.create!(status: 'completed')
+      @invoice_5.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_6 = @customer.invoices.create!(status: 'completed')
+      @invoice_6.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_3.invoice_items.create!(invoice_id: @invoice_4.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_3.invoice_items.create!(invoice_id: @invoice_5.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_3.invoice_items.create!(invoice_id: @invoice_6.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_4 = Merchant.create!(name: 'For Real Meat')
+      @item_4 = @merchant_4.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_7 = @customer.invoices.create!(status: 'completed')
+      @invoice_7.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_8 = @customer.invoices.create!(status: 'completed')
+      @invoice_8.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_9 = @customer.invoices.create!(status: 'completed')
+      @invoice_9.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_10 = @customer.invoices.create!(status: 'completed')
+      @invoice_10.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_4.invoice_items.create!(invoice_id: @invoice_7.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_4.invoice_items.create!(invoice_id: @invoice_8.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_4.invoice_items.create!(invoice_id: @invoice_9.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_4.invoice_items.create!(invoice_id: @invoice_10.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_5 = Merchant.create!(name: 'Drews Steak Serenium')
+      @item_5 = @merchant_5.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_11 = @customer.invoices.create!(status: 'completed')
+      @invoice_11.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_12 = @customer.invoices.create!(status: 'completed')
+      @invoice_12.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_13 = @customer.invoices.create!(status: 'completed')
+      @invoice_13.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_14 = @customer.invoices.create!(status: 'completed')
+      @invoice_14.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_15 = @customer.invoices.create!(status: 'completed')
+      @invoice_15.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_5.invoice_items.create!(invoice_id: @invoice_11.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_5.invoice_items.create!(invoice_id: @invoice_12.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_5.invoice_items.create!(invoice_id: @invoice_13.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_5.invoice_items.create!(invoice_id: @invoice_14.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_5.invoice_items.create!(invoice_id: @invoice_15.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_6 = Merchant.create!(name: 'Cattlemans Steakhouse')
+      @item_6 = @merchant_6.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_16 = @customer.invoices.create!(status: 'completed')
+      @invoice_16.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_17 = @customer.invoices.create!(status: 'completed')
+      @invoice_17.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_18 = @customer.invoices.create!(status: 'completed')
+      @invoice_18.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_19 = @customer.invoices.create!(status: 'completed')
+      @invoice_19.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_20 = @customer.invoices.create!(status: 'completed')
+      @invoice_20.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @invoice_21 = @customer.invoices.create!(status: 'completed')
+      @invoice_21.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_6.invoice_items.create!(invoice_id: @invoice_16.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_6.invoice_items.create!(invoice_id: @invoice_17.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_6.invoice_items.create!(invoice_id: @invoice_18.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_6.invoice_items.create!(invoice_id: @invoice_19.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_6.invoice_items.create!(invoice_id: @invoice_20.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_6.invoice_items.create!(invoice_id: @invoice_21.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_7 = Merchant.create!(name: 'Wills Sad Meats')
+      @item_7 = @merchant_7.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_22 = @customer.invoices.create!(status: 'completed')
+      @invoice_22.transactions.create!(credit_card_number: '123456789', result: 'failed')
+      @item_7.invoice_items.create!(invoice_id: @invoice_22.id, quantity: 2, unit_price: 75, status: 'packaged')
+
+      @merchant_8 = Merchant.create!(name: 'Overcharge Inc')
+      @item_8 = @merchant_8.items.create!(name: 'Ribeye', unit_price: 75, description: 'Boneless Cut')
+      @invoice_23 = @customer.invoices.create!(status: 'completed')
+      @invoice_23.transactions.create!(credit_card_number: '123456789', result: 'failed')
+      @invoice_24 = @customer.invoices.create!(status: 'completed')
+      @invoice_24.transactions.create!(credit_card_number: '123456789', result: 'success')
+      @item_8.invoice_items.create!(invoice_id: @invoice_23.id, quantity: 2, unit_price: 75, status: 'packaged')
+      @item_8.invoice_items.create!(invoice_id: @invoice_24.id, quantity: 2, unit_price: 75, status: 'packaged')
+    end
+
+    it '.total_revenue returns the total revenue for merchants with 1 or more successful transaction' do
+      expect(@merchant_1.total_revenue).to eq(150)
+      expect(@merchant_2.total_revenue).to eq(300)
+      expect(@merchant_3.total_revenue).to eq(450)
+      expect(@merchant_4.total_revenue).to eq(600)
+      expect(@merchant_5.total_revenue).to eq(750)
+      expect(@merchant_6.total_revenue).to eq(900)
+    end
+
+    it '.top_five returns the top 5 merchants by revenue'
+
+  end
 end
