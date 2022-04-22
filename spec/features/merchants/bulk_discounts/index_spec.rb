@@ -21,7 +21,7 @@ RSpec.describe 'merchant bulk discount index' do
     end
   end
 
-  it 'shows percentage_discount and quantity for each bulk discount' do
+  it 'links to new bulk discount' do
     merchant_1 = Merchant.create(name: "Drew's")
     merchant_2 = Merchant.create(name: "Geddy's")
 
