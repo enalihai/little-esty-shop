@@ -30,7 +30,8 @@ Rails.application.routes.draw do
 
   get '/merchants/:id/dashboard', to: 'merchants#show'
   get '/merchants/:id/bulk_discounts', to: 'merchant_bulk_discounts#index'
-
+  get '/merchants/:id/bulk_discounts/new', to: 'merchant_bulk_discounts#new'
+  post '/merchants/:id/bulk_discounts', to: 'merchant_bulk_discounts#create'
   resources :admin, only: [:index]
 
   namespace :admin do
