@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe 'new merchant bulk discount' do
-  it 'creates a new bulk discount then routes to the index page' do
+RSpec.describe 'merchant bulk discount show' do
+  it 'shows bulk discount attributes' do
     merchant_1 = Merchant.create(name: "Drew's")
     merchant_2 = Merchant.create(name: "Geddy's")
 
@@ -9,7 +9,7 @@ RSpec.describe 'new merchant bulk discount' do
     bulk_discount_2 = merchant_1.bulk_discounts.create(percentage_discount: 30, quantity_threshold:25  )
     bulk_discount_3 = merchant_2.bulk_discounts.create(percentage_discount: 10, quantity_threshold:22  )
 
-    expect(page).to have_current_path("/merchants/#{merchant_1.id}/bulk_discounts/#{bulk_discount_1.id}")
+    visit "/merchants/#{merchant_1.id}/bulk_discounts/#{bulk_discount_1.id}"
     expect(page).to have_content('20%')
     expect(page).to have_content('15')
     expect(page).to_not have_content('10%')
