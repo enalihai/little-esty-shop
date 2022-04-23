@@ -44,7 +44,7 @@ RSpec.describe 'merchant bulk discount index' do
     bulk_discount_3 = merchant_2.bulk_discounts.create(percentage_discount: 10, quantity_threshold:22  )
 
     visit "/merchants/#{merchant_1.id}/bulk_discounts"
-    click_button("Delete this Discount", :match => :first)
+    click_button("Delete", :match => :first)
 
     expect(page).to have_current_path("/merchants/#{merchant_1.id}/bulk_discounts")
     expect(page).to_not have_content("20%")
