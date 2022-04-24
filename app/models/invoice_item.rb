@@ -9,6 +9,11 @@ class InvoiceItem < ApplicationRecord
     sum('unit_price * quantity')
   end
 
+  def unit_price_after_discount
+    binding.pry
+    # invoice_item.item.merchant.bulk_discounts.where("quantity_threshold < ?", 200).max.percentage_discount
+  end
+
   def invoice_dates
     invoice.created_at.strftime("%A, %B %d, %Y")
   end
