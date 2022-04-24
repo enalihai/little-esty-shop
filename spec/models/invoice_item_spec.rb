@@ -17,11 +17,10 @@ RSpec.describe InvoiceItem, type: :model do
 
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 6, status: 1, unit_price: 295)
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 2, status: 0, unit_price: 215)
-      binding.pry
       expect(InvoiceItem.total_revenue).to eq(2200)
     end
   end
-    it '#total_revenue_after_discounts' do
+    it '#unit_price_after_discounts' do
       walmart = Merchant.create!(name: "Wal-Mart")
 
       bulk_discount_1 = walmart.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 25)

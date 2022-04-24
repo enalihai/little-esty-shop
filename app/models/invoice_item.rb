@@ -10,8 +10,7 @@ class InvoiceItem < ApplicationRecord
   end
 
   def unit_price_after_discount
-    binding.pry
-    # invoice_item.item.merchant.bulk_discounts.where("quantity_threshold < ?", 200).max.percentage_discount
+  (100 - item.merchant.bulk_discounts.where("quantity_threshold < ?", quantity).max.percentage_discount.to_f)/100  * item.unit_price
   end
 
   def invoice_dates
