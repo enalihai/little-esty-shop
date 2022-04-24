@@ -22,7 +22,7 @@ class Admin::MerchantsController < ApplicationController
   end
 
   def edit
-    @merchant = Merchant.find(params[:bulk_discounts_id])
+    @merchant = Merchant.find(params[:id])
   end
 
   def create
