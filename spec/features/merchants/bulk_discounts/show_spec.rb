@@ -15,4 +15,16 @@ RSpec.describe 'merchant bulk discount show' do
     expect(page).to_not have_content('10%')
     expect(page).to_not have_content('22')
   end
+
+  it 'has link to edit bulk discount' do
+    merchant_1 = Merchant.create(name: "Drew's")
+
+    bulk_discount_1 = merchant_1.bulk_discounts.create(percentage_discount: 20, quantity_threshold:15  )
+
+
+    visit "/merchants/#{merchant_1.id}/bulk_discounts/#{bulk_discount_1.id}"
+    click_link("Edit")
+
+    expect(page).to have_current_path("/merchants/#{merchant_1.id}/bulk_discounts/#{bulk_discount_1.id}/edit")
+  end
 end
