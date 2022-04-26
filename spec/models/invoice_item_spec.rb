@@ -4,6 +4,8 @@ RSpec.describe InvoiceItem, type: :model do
   describe 'relationships' do
     it { should belong_to(:invoice) }
     it { should belong_to(:item) }
+    it { should have_many(:bulk_discounts).through(:item)}
+    it { should have_many(:merchants).through(:item)}
   end
 
   describe 'class methods' do
@@ -30,7 +32,7 @@ RSpec.describe InvoiceItem, type: :model do
 
       invoice_1 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
 
-    invoice_item = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
+      invoice_item = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
 
       expect(invoice_item.unit_price_after_discount).to eq(225)
     end
