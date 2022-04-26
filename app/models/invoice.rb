@@ -29,7 +29,7 @@ class Invoice < ApplicationRecord
 
 
   def invoice_total_revenue
-    invoice_items.sum('invoice_items.quantity * invoice_items.unit_price')
+    invoice_items.sum('invoice_items.quantity * invoice_items.unit_price')/100.to_f
   end
 
   def discount_for_merchant(merchant)
@@ -41,7 +41,7 @@ class Invoice < ApplicationRecord
                         .maximum('invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percentage_discount / 100')
                         .pluck(1)
                         .sum
-                        discount
+                        discount/100.to_f
   end
 
   def total_invoice_discount
@@ -50,7 +50,7 @@ class Invoice < ApplicationRecord
                         .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
                         .select('invoice_items.id, max(invoice_items.quantity * invoice_items.unit_price * bulk_discounts.percentage_discount / 100.0) AS discount_total')
                         .group('invoice_items.id')
-                        discount.sum(&:discount_total)
+                        discount.sum(&:discount_total)/100.to_f
   end
 
   def invoice_total_revenue_after_discount

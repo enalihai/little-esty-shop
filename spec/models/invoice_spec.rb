@@ -107,23 +107,7 @@ RSpec.describe Invoice, type: :model do
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
 
-      expect(invoice_1.discount_for_merchant(walmart)).to eq(83000)
-    end
-    xit '#total_revenue_for_merchant_after_discount' do
-      walmart = Merchant.create!(name: "Wal-Mart")
-
-      bulk_discount_1 = walmart.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 25)
-      bulk_discount_2 = walmart.bulk_discounts.create!(quantity_threshold: 100, percentage_discount: 35)
-      bob = Customer.create!(first_name: "Bob", last_name: "Benson")
-      item_1 = walmart.items.create!(name: "pickle", description: "sour cucumber", unit_price: 300)
-      item_2 = walmart.items.create!(name: "ray gun", description: "pew pew", unit_price: 2000)
-      invoice_1 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
-      invoice_2 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
-
-      InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
-      InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
-
-      expect(invoice_1.total_revenue_for_merchant_after_discount(walmart)).to eq(83000)
+      expect(invoice_1.discount_for_merchant(walmart)).to eq(830.0)
     end
     it '#total_invoice_discount' do
       walmart = Merchant.create!(name: "Wal-Mart")
@@ -143,7 +127,7 @@ RSpec.describe Invoice, type: :model do
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_3.id, quantity: 7, status: 1, unit_price: item_3.unit_price)
 
-      expect(invoice_1.total_invoice_discount).to eq(0.111e6)
+      expect(invoice_1.total_invoice_discount).to eq(0.111e4)
     end
     it '#invoice_total_revenue_after_discount' do
       walmart = Merchant.create!(name: "Wal-Mart")
@@ -157,9 +141,9 @@ RSpec.describe Invoice, type: :model do
       invoice_2 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
 
       InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
-      InvoiceItem.create!(invoice_id: invoice_2.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
+      InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
 
-      expect(invoice_1.invoice_total_revenue_after_discount).to eq(0.18e5)
+      expect(invoice_1.invoice_total_revenue_after_discount).to eq(1610)
     end
   end
 end
