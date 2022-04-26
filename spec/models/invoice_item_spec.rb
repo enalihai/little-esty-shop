@@ -5,7 +5,7 @@ RSpec.describe InvoiceItem, type: :model do
     it { should belong_to(:invoice) }
     it { should belong_to(:item) }
     it { should have_many(:bulk_discounts).through(:item)}
-    it { should have_many(:merchants).through(:item)}
+    it { should have_one(:merchant).through(:item)}
   end
 
   describe 'class methods' do
@@ -50,7 +50,7 @@ RSpec.describe InvoiceItem, type: :model do
       invoice_item_1 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
       invoice_item_2 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
 
-      expect(invoice_item.applied_discount).to eq(bulkdiscount_1.id)
+      expect(invoice_item_1.applied_discount).to eq(bulk_discount_1)
     end
 
 
