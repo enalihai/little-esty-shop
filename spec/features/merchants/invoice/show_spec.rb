@@ -64,7 +64,7 @@ RSpec.describe 'the merchant invoice show page' do
         invoice_item_1 = item1.invoice_items.create(invoice_id:invoice_1.id, quantity:45, unit_price: 1000)
         invoice_item_2 = item2.invoice_items.create(invoice_id:invoice_1.id, quantity:222, unit_price: 1000)
         visit "/merchants/#{merchant.id}/invoices/#{invoice_1.id}"
-      
+
         expect(page).to have_content("Total Revenue: 2670.0")
 
   end
@@ -84,7 +84,6 @@ RSpec.describe 'the merchant invoice show page' do
     InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
 
     visit "/merchants/#{walmart.id}/invoices/#{invoice_1.id}"
-    save_and_open_page
     expect(page).to have_content("1610")
   end
   describe 'as a merchant' do
