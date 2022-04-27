@@ -83,7 +83,7 @@ RSpec.describe 'the merchant invoice show page' do
     invoice_item_2 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
 
     visit "/merchants/#{walmart.id}/invoices/#{invoice_1.id}"
-    save_and_open_page
+
     within "#item-#{invoice_item_1.id}" do
       click_link("Discount")
     end
