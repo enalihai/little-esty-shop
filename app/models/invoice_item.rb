@@ -2,7 +2,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :invoice
   belongs_to :item
   has_many :bulk_discounts, through: :item
-  has_many :merchants, through: :item
+  has_one :merchant, through: :item
 
   enum status: [:pending, :packaged, :shipped]
 
@@ -32,6 +32,18 @@ class InvoiceItem < ApplicationRecord
       return true
     else
       return false
+    end
+  end
+
+  def applied_discount
+    bulk_discounts.where('? >= quantity_threshold', quantity).order(percentage_discount: :desc).first
+  end
+
+  def has_discount?
+    if applied_discount != nil
+      true
+    else
+      false
     end
   end
 end
