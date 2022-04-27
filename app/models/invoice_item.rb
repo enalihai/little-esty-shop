@@ -41,7 +41,9 @@ class InvoiceItem < ApplicationRecord
 
   def has_discount?
     if applied_discount != nil
-      return true
+      true
+    else
+      false
     end
   end
 end
