@@ -18,6 +18,9 @@ Discounted Reveneue: <%= @invoice.invoice_total_revenue_after_discount %>
     <br>
     Unit Price: <%=invoice_item.unit_price%>
     <br>
+    <% if invoice_item.has_discount? %>
+      <%= link_to "Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{invoice_item.applied_discount.id}" %>
+    <% end %>
     <%= form_with url: "/merchants/#{@merchant.id}/invoice_items/#{invoice_item.id}", method: :patch, local: true do |form| %>
       <%= form.label "Status" %>
       <%= form.select(:status, options_for_select([['Pending', :pending], ['Packaged', :packaged], ['Shipped', :shipped]], invoice_item.status)) %>
