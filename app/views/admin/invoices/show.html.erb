@@ -13,3 +13,4 @@
   </div>
 <% end %>
 <h3>Total Revenue: $<%= '%.2f' % (@invoice.invoice_items.total_revenue.to_f.round(2) / 100).round(2) %></h3>
+<h3>Total Revenue After Discount: $<%= '%.2f' % (@invoice.invoice_total_revenue_after_discount.to_f.round(2)).round(2) %></h3>
