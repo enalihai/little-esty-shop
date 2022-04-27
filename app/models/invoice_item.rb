@@ -1,12 +1,22 @@
 class InvoiceItem < ApplicationRecord
   belongs_to :invoice
   belongs_to :item
+  has_many :bulk_discounts, through: :item
+  has_one :merchant, through: :item
 
   enum status: [:pending, :packaged, :shipped]
 
 
   def self.total_revenue
     sum('unit_price * quantity')
+  end
+
+  def unit_price_after_discount
+  (100 - item.merchant.bulk_discounts.where("quantity_threshold < ?", quantity).max.percentage_discount.to_f)/100  * item.unit_price
+  end
+
+  def revenue_after_discount
+    quantity * unit_price_after_discount
   end
 
   def invoice_dates
@@ -22,6 +32,18 @@ class InvoiceItem < ApplicationRecord
       return true
     else
       return false
+    end
+  end
+
+  def applied_discount
+    bulk_discounts.where('? >= quantity_threshold', quantity).order(percentage_discount: :desc).first
+  end
+
+  def has_discount?
+    if applied_discount != nil
+      true
+    else
+      false
     end
   end
 end

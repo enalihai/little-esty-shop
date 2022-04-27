@@ -65,10 +65,66 @@ RSpec.describe 'the merchant invoice show page' do
         invoice_item_2 = item2.invoice_items.create(invoice_id:invoice_1.id, quantity:222, unit_price: 1000)
         visit "/merchants/#{merchant.id}/invoices/#{invoice_1.id}"
 
-        expect(page).to have_content("267000")
+        expect(page).to have_content("Total Revenue: 2670.0")
+
+  end
+  it 'has links to applied discounts show page' do
+    walmart = Merchant.create!(name: "Wal-Mart")
+
+    bulk_discount_1 = walmart.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 25)
+    bulk_discount_2 = walmart.bulk_discounts.create!(quantity_threshold: 100, percentage_discount: 35)
+    bob = Customer.create!(first_name: "Bob", last_name: "Benson")
+    item_1 = walmart.items.create!(name: "pickle", description: "sour cucumber", unit_price: 300)
+    item_2 = walmart.items.create!(name: "ray gun", description: "pew pew", unit_price: 2000)
+    invoice_1 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+    invoice_2 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+
+    invoice_item_1 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
+    invoice_item_2 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
+
+    visit "/merchants/#{walmart.id}/invoices/#{invoice_1.id}"
+
+    within "#item-#{invoice_item_1.id}" do
+      click_link("Discount")
+    end
+    expect(current_path).to eq("/merchants/#{walmart.id}/bulk_discounts/#{bulk_discount_1.id}")
+  end
+  it 'shows total revenue after discount' do
+    walmart = Merchant.create!(name: "Wal-Mart")
+
+    bulk_discount_1 = walmart.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 25)
+    bulk_discount_2 = walmart.bulk_discounts.create!(quantity_threshold: 100, percentage_discount: 35)
+    bob = Customer.create!(first_name: "Bob", last_name: "Benson")
+    item_1 = walmart.items.create!(name: "pickle", description: "sour cucumber", unit_price: 300)
+    item_2 = walmart.items.create!(name: "ray gun", description: "pew pew", unit_price: 2000)
+    invoice_1 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+    invoice_2 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+
+    invoice_item_1 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
+    invoice_item_2 = InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
+
+    visit "/merchants/#{walmart.id}/invoices/#{invoice_1.id}"
+    expect(page).to have_content("1610")
 
   end
 
+  it 'shows total revenue after discount' do
+    walmart = Merchant.create!(name: "Wal-Mart")
+
+    bulk_discount_1 = walmart.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 25)
+    bulk_discount_2 = walmart.bulk_discounts.create!(quantity_threshold: 100, percentage_discount: 35)
+    bob = Customer.create!(first_name: "Bob", last_name: "Benson")
+    item_1 = walmart.items.create!(name: "pickle", description: "sour cucumber", unit_price: 300)
+    item_2 = walmart.items.create!(name: "ray gun", description: "pew pew", unit_price: 2000)
+    invoice_1 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+    invoice_2 = bob.invoices.create!(status: 1, created_at: '05 Apr 2022 00:53:36 UTC +00:00')
+
+    InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_1.id, quantity: 80, status: 1, unit_price: item_1.unit_price)
+    InvoiceItem.create!(invoice_id: invoice_1.id, item_id: item_2.id, quantity: 110, status: 1, unit_price: item_2.unit_price)
+
+    visit "/merchants/#{walmart.id}/invoices/#{invoice_1.id}"
+    expect(page).to have_content("1610")
+  end
   describe 'as a merchant' do
     describe 'when i visit my merchant invoice show page' do
       before :each do

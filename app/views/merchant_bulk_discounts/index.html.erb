@@ -4,6 +4,11 @@
 <% @merchant.bulk_discounts.each do |discount| %>
   <p><%= discount.quantity_threshold  %> items purchased
     <%= discount.percentage_discount  %>%
-  </p>
+<%= button_to "Delete", "/merchants/#{@merchant.id}/bulk_discounts", method: :delete, params: {to_delete: discount.id}%>  </p>
 <% end %>
 </div>
+<%= link_to "Create a New Discount", "/merchants/#{@merchant.id}/bulk_discounts/new" %>
+<% @holidays.three_holidays.each do |holiday| %>
+  <%= holiday.name %>
+  <%= holiday.date %>
+<% end %>

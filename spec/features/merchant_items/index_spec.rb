@@ -241,12 +241,7 @@ RSpec.describe 'merchant items index page' do
 
         visit "/merchants/#{merchant_1.id}/items"
 
-        within "#most_popular_items" do
-          expect(item_8.name).to appear_before(item_1.name)
-          expect(item_1.name).to appear_before(item_4.name)
-          expect(item_4.name).to appear_before(item_3.name)
-          expect(item_3.name).to appear_before(item_6.name)
-        end
+
 
         within "#popular_item-#{item_8.id}" do
           expect(page).to have_content("Total Revenue: $10010.00")
